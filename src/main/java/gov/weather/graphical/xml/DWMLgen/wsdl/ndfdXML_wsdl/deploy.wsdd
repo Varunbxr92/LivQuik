@@ -1,0 +1,205 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from ndfdXML WSDL service -->
+
+  <service name="ndfdXMLPort" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl"/>
+      <parameter name="wsdlServiceElement" value="ndfdXML"/>
+      <parameter name="schemaUnqualified" value="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+      <parameter name="wsdlServicePort" value="ndfdXMLPort"/>
+      <parameter name="className" value="gov.weather.graphical.xml.DWMLgen.wsdl.ndfdXML_wsdl.NdfdXMLBindingImpl"/>
+      <parameter name="wsdlPortType" value="ndfdXMLPortType"/>
+      <parameter name="typeMappingVersion" value="1.1"/>
+      <operation name="NDFDgen" qname="operNS:NDFDgen" xmlns:operNS="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl" returnQName="dwmlOut" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl#NDFDgen" >
+        <parameter qname="latitude" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="longitude" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="product" type="tns:productType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+        <parameter qname="startTime" type="tns:dateTime" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="endTime" type="tns:dateTime" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="Unit" type="tns:unitType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+        <parameter qname="weatherParameters" type="tns:weatherParametersType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+      </operation>
+      <operation name="NDFDgenByDay" qname="operNS:NDFDgenByDay" xmlns:operNS="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl" returnQName="dwmlByDayOut" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl#NDFDgenByDay" >
+        <parameter qname="latitude" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="longitude" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="startDate" type="tns:date" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="numDays" type="tns:integer" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="Unit" type="tns:unitType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+        <parameter qname="format" type="tns:formatType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+      </operation>
+      <operation name="NDFDgenLatLonList" qname="operNS:NDFDgenLatLonList" xmlns:operNS="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl" returnQName="dwmlOut" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl#NDFDgenLatLonList" >
+        <parameter qname="listLatLon" type="tns:listLatLonType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+        <parameter qname="product" type="tns:productType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+        <parameter qname="startTime" type="tns:dateTime" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="endTime" type="tns:dateTime" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="Unit" type="tns:unitType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+        <parameter qname="weatherParameters" type="tns:weatherParametersType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+      </operation>
+      <operation name="NDFDgenByDayLatLonList" qname="operNS:NDFDgenByDayLatLonList" xmlns:operNS="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl" returnQName="dwmlByDayOut" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl#NDFDgenByDayLatLonList" >
+        <parameter qname="listLatLon" type="tns:listLatLonType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+        <parameter qname="startDate" type="tns:date" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="numDays" type="tns:integer" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="Unit" type="tns:unitType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+        <parameter qname="format" type="tns:formatType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+      </operation>
+      <operation name="gmlLatLonList" qname="operNS:GmlLatLonList" xmlns:operNS="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl" returnQName="dwGmlOut" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl#GmlLatLonList" >
+        <parameter qname="listLatLon" type="tns:listLatLonType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+        <parameter qname="requestedTime" type="tns:dateTime" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="featureType" type="tns:featureTypeType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+        <parameter qname="weatherParameters" type="tns:weatherParametersType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+      </operation>
+      <operation name="gmlTimeSeries" qname="operNS:GmlTimeSeries" xmlns:operNS="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl" returnQName="dwGmlOut" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl#GmlTimeSeries" >
+        <parameter qname="listLatLon" type="tns:listLatLonType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+        <parameter qname="startTime" type="tns:dateTime" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="endTime" type="tns:dateTime" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="compType" type="tns:compTypeType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+        <parameter qname="featureType" type="tns:featureTypeType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+        <parameter qname="propertyName" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="latLonListSubgrid" qname="operNS:LatLonListSubgrid" xmlns:operNS="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl" returnQName="listLatLonOut" returnType="rtns:listLatLonType" xmlns:rtns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd" soapAction="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl#LatLonListSubgrid" >
+        <parameter qname="lowerLeftLatitude" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="lowerLeftLongitude" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="upperRightLatitude" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="upperRightLongitude" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="resolution" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="latLonListLine" qname="operNS:LatLonListLine" xmlns:operNS="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl" returnQName="listLatLonOut" returnType="rtns:listLatLonType" xmlns:rtns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd" soapAction="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl#LatLonListLine" >
+        <parameter qname="endPoint1Lat" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="endPoint1Lon" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="endPoint2Lat" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="endPoint2Lon" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="latLonListZipCode" qname="operNS:LatLonListZipCode" xmlns:operNS="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl" returnQName="listLatLonOut" returnType="rtns:listLatLonType" xmlns:rtns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd" soapAction="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl#LatLonListZipCode" >
+        <parameter qname="zipCodeList" type="tns:zipCodeListType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+      </operation>
+      <operation name="latLonListSquare" qname="operNS:LatLonListSquare" xmlns:operNS="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl" returnQName="listLatLonOut" returnType="rtns:listLatLonType" xmlns:rtns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd" soapAction="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl#LatLonListSquare" >
+        <parameter qname="centerPointLat" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="centerPointLon" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="distanceLat" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="distanceLon" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="resolution" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="cornerPoints" qname="operNS:CornerPoints" xmlns:operNS="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl" returnQName="listLatLonOut" returnType="rtns:listLatLonType" xmlns:rtns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd" soapAction="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl#CornerPoints" >
+        <parameter qname="sector" type="tns:sectorType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+      </operation>
+      <operation name="latLonListCityNames" qname="operNS:LatLonListCityNames" xmlns:operNS="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl" returnQName="listCityNamesOut" returnType="rtns:listCityNamesType" xmlns:rtns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd" soapAction="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl#LatLonListCityNames" >
+        <parameter qname="displayLevel" type="tns:displayLevelType" xmlns:tns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"/>
+      </operation>
+      <parameter name="allowedMethods" value="gmlLatLonList NDFDgenLatLonList NDFDgen NDFDgenByDay gmlTimeSeries NDFDgenByDayLatLonList latLonListSubgrid latLonListLine latLonListCityNames latLonListZipCode cornerPoints latLonListSquare"/>
+
+      <typeMapping
+        xmlns:ns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"
+        qname="ns:zipCodeListType"
+        type="java:java.lang.String"
+        serializer="org.apache.axis.encoding.ser.SimpleSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.SimpleDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"
+        qname="ns:zipCodeType"
+        type="java:java.lang.String"
+        serializer="org.apache.axis.encoding.ser.SimpleSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.SimpleDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"
+        qname="ns:listCityNamesType"
+        type="java:java.lang.String"
+        serializer="org.apache.axis.encoding.ser.SimpleSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.SimpleDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"
+        qname="ns:displayLevelType"
+        type="java:gov.weather.graphical.xml.DWMLgen.schema.DWML_xsd.DisplayLevelType"
+        serializer="org.apache.axis.encoding.ser.EnumSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.EnumDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"
+        qname="ns:unitType"
+        type="java:gov.weather.graphical.xml.DWMLgen.schema.DWML_xsd.UnitType"
+        serializer="org.apache.axis.encoding.ser.EnumSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.EnumDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"
+        qname="ns:latLonPairType"
+        type="java:java.lang.String"
+        serializer="org.apache.axis.encoding.ser.SimpleSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.SimpleDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"
+        qname="ns:sectorType"
+        type="java:gov.weather.graphical.xml.DWMLgen.schema.DWML_xsd.SectorType"
+        serializer="org.apache.axis.encoding.ser.EnumSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.EnumDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"
+        qname="ns:formatType"
+        type="java:gov.weather.graphical.xml.DWMLgen.schema.DWML_xsd.FormatType"
+        serializer="org.apache.axis.encoding.ser.EnumSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.EnumDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"
+        qname="ns:featureTypeType"
+        type="java:gov.weather.graphical.xml.DWMLgen.schema.DWML_xsd.FeatureTypeType"
+        serializer="org.apache.axis.encoding.ser.EnumSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.EnumDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"
+        qname="ns:compTypeType"
+        type="java:gov.weather.graphical.xml.DWMLgen.schema.DWML_xsd.CompTypeType"
+        serializer="org.apache.axis.encoding.ser.EnumSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.EnumDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"
+        qname="ns:productType"
+        type="java:gov.weather.graphical.xml.DWMLgen.schema.DWML_xsd.ProductType"
+        serializer="org.apache.axis.encoding.ser.EnumSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.EnumDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"
+        qname="ns:listLatLonType"
+        type="java:java.lang.String"
+        serializer="org.apache.axis.encoding.ser.SimpleSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.SimpleDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="https://graphical.weather.gov/xml/DWMLgen/schema/DWML.xsd"
+        qname="ns:weatherParametersType"
+        type="java:gov.weather.graphical.xml.DWMLgen.schema.DWML_xsd.WeatherParametersType"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  </service>
+</deployment>
