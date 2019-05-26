@@ -14,15 +14,16 @@ There are two REST API's exposed from this microservices,
  2. In order to get the Weather Forecast of City with it's name and number of days for which you want the forecast
  
  Request Method : GET
- Request param : cityName, startDate (Date type not string), numberOfDays
-
- cityName : Accepts String Value only
- startDate : Accepts Date in yyyy-mm-dd format
- numberOfDays: Accpets integer value
  
- End Point : localhost:8080/getWeatherForecast
-Sample Request : localhost:8080/getWeatherForecast?cityName=Austin,TX&startDate=2019-05-25&numberOfDays=10
-Response: Watch it after you run it
+  End Point : localhost:8080/getWeatherForecast
+  Request param : cityName, startDate (Date type not string), numberOfDays
+
+  cityName : Accepts String Value only
+  startDate : Accepts Date in yyyy-mm-dd format
+  numberOfDays: Accpets integer value
+ 
+ Sample Request : localhost:8080/getWeatherForecast?cityName=Austin,TX&startDate=2019-05-25&numberOfDays=10
+ Response: Watch it after you run it
 
  
  
