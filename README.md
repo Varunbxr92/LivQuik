@@ -24,7 +24,7 @@ There are two REST API's exposed from this microservices,
     startDate : Accepts Date in yyyy-mm-dd format
     numberOfDays: Accpets integer value
  
-    Sample Request : localhost:8080/getWeatherForecast?cityName=Austin,TX&startDate=2019-05-25&numberOfDays=10
+    Sample Request : localhost:8080/getWeatherForecast?cityName=Atlanta&startDate=2019-05-26&numberOfDays=5
     Response: Watch it after you run it
 
  
