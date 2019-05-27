@@ -1,5 +1,20 @@
 # LivQuik
 LivQuik Application Weather forecast
+
+Things you may require to run it:
+
+Java 8
+Maven 3
+Intilej Idea IDE (Optional)
+Else you can make a build by running foloowing command
+
+   Command :
+   
+     mvn clean install -D skipTests
+     cd target/
+     java -jar LivQuikApp-0.0.1-SNAPSHOT.jar
+
+
 Import the package and do a mvn clean install to build package top download the dependencies,
 once all the dependency resolved, run this application
 which by default will run on port :8080, the server on which will be running
