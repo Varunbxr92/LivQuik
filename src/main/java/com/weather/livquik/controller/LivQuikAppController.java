@@ -1,5 +1,6 @@
 package com.weather.livquik.controller;
 
+import com.google.common.collect.Lists;
 import com.weather.livquik.exception.NOAACommunicationException;
 import com.weather.livquik.model.CityLongLati;
 import com.weather.livquik.model.NOAAMethod;
@@ -8,13 +9,14 @@ import com.weather.livquik.model.soap.Dwml;
 import com.weather.livquik.soap.LatLonListCityNames;
 import com.weather.livquik.soap.NDFDgen;
 import com.weather.livquik.soap.NOAAWeather;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.*;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -24,27 +26,28 @@ import java.util.Date;
  * */
 
 @RestController
+@Slf4j
 public class LivQuikAppController {
+
+
+    private static final List<CityLongLati> CITY_LONG_LATIS = Collections.synchronizedList(Lists.newArrayList());
 
     /**
      * This method returns the City and Location list
      * */
     @RequestMapping(value="/getCityAndLocation",produces={"application/json"},method= RequestMethod.GET)
-    public CityLongLati getCityAndLocation(){
+    public List<CityLongLati> getCityAndLocation(){
         Dwml cityData = null;
-        CityLongLati cityLongLati;
         try{
-            NOAAMethod noaaMethod = new LatLonListCityNames();
-            noaaMethod.addArgument("displayLevel","1");
-            NOAAWeather weather = new NOAAWeather();
-            cityData = weather.query(noaaMethod);
-            cityLongLati = new CityLongLati();
-            cityLongLati.setCityNameList(cityData.getCityNameList());
-            cityLongLati.setLatLongList(cityData.getLatLonList());
-            return cityLongLati;
+            if (CITY_LONG_LATIS.isEmpty()) {
+                buildCityAndLatLong();
+                return CITY_LONG_LATIS;
+            } else {
+                return CITY_LONG_LATIS;
+            }
         }
-        catch (NOAACommunicationException e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            log.error("Internal Server error", e);
         }
         return null;
     }
@@ -55,14 +58,21 @@ public class LivQuikAppController {
      * */
 
     @RequestMapping(value="/getWeatherForecast",produces={"application/json"},method= RequestMethod.GET)
-    public WeatherData getWeatherForecast(@RequestParam("cityName") String cityName,@RequestParam("startDate") Date startDate,@RequestParam("numberOfDays") int numberOfDays){
+    public WeatherData getWeatherForecast(@RequestParam("cityName") String cityName, @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, @RequestParam("numberOfDays") int numberOfDays){
         Dwml getWeatherData = null;
         WeatherData weatherData;
         try {
             NOAAMethod method = new NDFDgen();
 
-            method.addArgument("latitude", "35.4");
-            method.addArgument("longitude", "-97.6");
+            String latLong = findLatLong(cityName);
+            if (Objects.isNull(latLong)) {
+                return null;
+            }
+
+            String []latLongArray = latLong.split(",");
+
+            method.addArgument("latitude", latLongArray[0]);
+            method.addArgument("longitude", latLongArray[1]);
             method.addArgument("product", "time-series");
             method.addArgument("startTime", convertDateToString(startDate));
             method.addArgument("endTime", addDays(startDate,numberOfDays));
@@ -85,18 +95,53 @@ public class LivQuikAppController {
 
     private static String convertDateToString(Date date){
         System.out.println(date);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
-        String strDate = dateFormat.format(c.getTime());
-        return strDate;
+        return dateFormat.format(c.getTime());
     }
 
     private static String addDays(Date date,int numOfDays){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, numOfDays);
-        String strDate = dateFormat.format(c.getTime());
-        return strDate;
+        return dateFormat.format(c.getTime());
+    }
+
+    private static String findLatLong(String cityName) {
+        if (CITY_LONG_LATIS.isEmpty()) {
+            buildCityAndLatLong();
+        }
+        return CITY_LONG_LATIS
+                .stream()
+                .filter(cityLongLati -> cityLongLati.getCityName().startsWith(cityName))
+                .findFirst()
+                .map(CityLongLati::getLatLong)
+                .orElse(null);
+    }
+
+    private static void buildCityAndLatLong() {
+        try {
+            NOAAMethod noaaMethod = new LatLonListCityNames();
+            noaaMethod.addArgument("displayLevel","1");
+            NOAAWeather weather = new NOAAWeather();
+            Dwml cityData = weather.query(noaaMethod);
+            String cityNames = cityData.getCityNameList();
+            String latLongs = cityData.getLatLonList();
+            String []cityNameList = cityNames.split("\\|");
+            String []latLongList = latLongs.split(" ");
+            if (cityNameList.length == latLongList.length) {
+                for (int i = 0; i < cityNameList.length; i++) {
+                    String city = cityNameList[i];
+                    if (latLongList.length > i) {
+                        String latLong = latLongList[i];
+                        CityLongLati cityLongLati = CityLongLati.builder().cityName(city).latLong(latLong).build();
+                        CITY_LONG_LATIS.add(cityLongLati);
+                    }
+                }
+            }
+        } catch (NOAACommunicationException e) {
+            log.error("Error in fetch data ", e);
+        }
     }
 
 }

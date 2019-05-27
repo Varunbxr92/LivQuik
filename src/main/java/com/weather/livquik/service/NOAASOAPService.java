@@ -43,8 +43,8 @@ public class NOAASOAPService extends NOAAService {
         method.addArgument("latitude", "35.4");
         method.addArgument("longitude", "-97.6");
         method.addArgument("product", "time-series");
-        method.addArgument("startTime", "2013-09-20T00:00");
-        method.addArgument("endTime", "2013-09-20T12:00");
+        method.addArgument("startTime", "2019-05-26");
+        method.addArgument("endTime", "2019-06-10");
         method.addArgument("Unit", "e");
         method.addArgument("weatherParameters", "maxt=true");
 
@@ -61,7 +61,7 @@ public class NOAASOAPService extends NOAAService {
             e.printStackTrace();
         }
 
-        System.out.println(data);
+        System.out.println(data.getData().toString());
         System.out.println("\n\n\n\n\n\n ---------->");
 //        System.out.println(cityData);
     }
